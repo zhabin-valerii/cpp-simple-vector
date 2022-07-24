@@ -26,16 +26,16 @@ public:
         raw_ptr_ = std::exchange(other.raw_ptr_, nullptr);
     }
     ArrayPtr& operator=(ArrayPtr&& other) noexcept {
-        raw_ptr_ = std::exchange(other.raw_ptr_, nullptr);
+        if (this != &other) {
+            std::swap(other.raw_ptr_, raw_ptr_);
+        }
         return *this;
     }
 
     // Запрещаем копирование
     ArrayPtr(const ArrayPtr&) = delete;
 
-    ~ArrayPtr() {
-        delete[] raw_ptr_;
-    }
+    ~ArrayPtr() = default;
 
     // Запрещаем присваивание
     ArrayPtr& operator=(const ArrayPtr&) = delete;

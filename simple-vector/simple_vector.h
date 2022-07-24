@@ -54,11 +54,7 @@ public:
     SimpleVector(std::initializer_list<Type> init) : items_(init.size()) {
         capacity_ = init.size();
         size_ = init.size();
-        int i = 0;
-        for (auto item : init) {
-            items_[i] = item;
-            ++i;
-        }
+        std::copy(init.begin(), init.end(), &items_[0]);
     }
 
     SimpleVector(const SimpleVector& other) {
@@ -104,11 +100,13 @@ public:
 
     // Возвращает ссылку на элемент с индексом index
     Type& operator[](size_t index) noexcept {
+        assert(index < size_);
         return items_[index];
     }
 
     // Возвращает константную ссылку на элемент с индексом index
     const Type& operator[](size_t index) const noexcept {
+        assert(index < size_);
         return items_[index];
     }
 
@@ -206,6 +204,7 @@ public:
     // Если перед вставкой значения вектор был заполнен полностью,
     // вместимость вектора должна увеличиться вдвое, а для вектора вместимостью 0 стать равной 1
     Iterator Insert(ConstIterator pos, const Type& value) {
+        assert(pos >= begin() && pos <= end());
         size_t index = static_cast<size_t>(pos - begin());
         if (pos == end()) {
             PushBack(value);
@@ -233,6 +232,7 @@ public:
     }
 
     Iterator Insert(ConstIterator pos, Type&& value) {
+        assert(pos >= begin() && pos <= end());
         size_t index = static_cast<size_t>(pos - begin());
         if (pos == end()) {
             PushBack(std::move(value));
@@ -268,6 +268,7 @@ public:
 
     // Удаляет элемент вектора в указанной позиции
     Iterator Erase(ConstIterator pos) {
+        assert(pos >= begin() && pos <= end());
         size_t index = static_cast<size_t>(pos - begin());
         std::move(begin() + index + 1, end(), begin() + index);
         --size_;
