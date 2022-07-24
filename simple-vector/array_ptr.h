@@ -35,7 +35,9 @@ public:
     // Запрещаем копирование
     ArrayPtr(const ArrayPtr&) = delete;
 
-    ~ArrayPtr() = default;
+    ~ArrayPtr() {
+        delete[] raw_ptr_;
+    }
 
     // Запрещаем присваивание
     ArrayPtr& operator=(const ArrayPtr&) = delete;
