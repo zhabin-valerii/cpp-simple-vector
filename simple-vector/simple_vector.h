@@ -193,7 +193,7 @@ public:
         else {
             capacity_ *= 2;
             ArrayPtr<Type> tmp(capacity_);
-            tmp =  std::move(items_);
+            std::move(&items_[0], &items_[size_], tmp.Get());
             tmp[size_++] = std::move(item);
             items_.swap(tmp);
         }
